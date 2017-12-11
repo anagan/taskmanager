@@ -1,0 +1,8 @@
+rootProject.name = 'tasks-manager-app'
+
+include 'common'
+include 'collaboration-server'
+include 'labels-server'
+include 'notification-server'
+include 'reminders-server'
+include 'tasks-server'
