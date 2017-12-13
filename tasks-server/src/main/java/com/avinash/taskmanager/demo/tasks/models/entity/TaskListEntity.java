@@ -3,6 +3,8 @@
  */
 package com.avinash.taskmanager.demo.tasks.models.entity;
 
+import static com.avinash.taskmanager.demo.tasks.utilities.CommonUtil.UUID;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,8 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import static com.avinash.taskmanager.demo.tasks.utilities.CommonUtil.UUID;
-
 /**
  * @author Avinash
  *
@@ -28,7 +28,7 @@ import static com.avinash.taskmanager.demo.tasks.utilities.CommonUtil.UUID;
 @Table(name = "tasklists")
 public class TaskListEntity {
 
-	private String id;
+	private long id;
 	private String listId;
 	private String title;
 	private String parent;
@@ -50,7 +50,7 @@ public class TaskListEntity {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -58,7 +58,7 @@ public class TaskListEntity {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -141,8 +141,8 @@ public class TaskListEntity {
 	/**
 	 * @return the user
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_ref_id")
+	@ManyToOne(fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_ref_id", updatable = false)
 	public UserEntity getUser() {
 		return user;
 	}
@@ -158,7 +158,8 @@ public class TaskListEntity {
 	/**
 	 * @return the tasks
 	 */
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "parId", cascade = CascadeType.ALL)
+	@Column(updatable = false)
 	public List<TaskEntity> getTasks() {
 		return tasks;
 	}
@@ -189,6 +190,7 @@ public class TaskListEntity {
 	/**
 	 * @return the createdTime
 	 */
+	@Column(updatable = false)
 	public Timestamp getCreatedTime() {
 		return createdTime;
 	}

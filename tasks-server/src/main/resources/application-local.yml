@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://taskmanager.c4btbq4mnnbc.us-west-1.rds.amazonaws.com:5432/tasks
+    username: avinashmn
+    password: Anagan3638
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect

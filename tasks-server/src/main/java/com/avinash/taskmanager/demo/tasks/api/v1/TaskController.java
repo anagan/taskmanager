@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-@RequestMapping("/service/v1/lists")
+@RequestMapping("/api/v1/lists")
 public class TaskController {
 
 	@Autowired
@@ -47,7 +47,7 @@ public class TaskController {
 	@RequestMapping(value = "/{listId}/tasks/{taskId}", method = RequestMethod.GET)
 	@JsonView(View.TasklistWithTaskSummary.class)
 	public ResponseEntity<Task> getTask(@PathVariable("listId") String listId, @PathVariable("taskId") String taskId) {
-		return new ResponseEntity<>(taskManager.getTask(taskId, listId), HttpStatus.OK);
+		return new ResponseEntity<>(taskManager.getTask(listId, taskId), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Create a custom task in the specified task list", 

@@ -14,17 +14,17 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
  */
 @Configuration
 @EnableResourceServer
-public class OAuth2ServerConfig extends ResourceServerConfigurerAdapter {
+public class OAuth2SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-		.antMatcher("/**")
+		.antMatcher("/api/**")
 		.authorizeRequests()
+		.antMatchers("/swagger-ui.html**", "/swagger-ui.html/**", "/swagger-resources/**", "/webjars/**", "/v2/**").permitAll()
 		.anyRequest()
-		.authenticated()
-		.antMatchers("/swagger-ui.html**", "/swagger-ui.html/**", "/swagger-resources/**", "/webjars/**", "/v2/**").permitAll();
+		.authenticated();
+		
 		httpSecurity.csrf().disable();
-		httpSecurity.headers().frameOptions().disable();
 	}
 }

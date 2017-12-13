@@ -16,11 +16,11 @@ public interface ITaskManager {
 
 	List<Task> getAllTasks(String listId);
 	
-	Task getTask(String taskId, String listId);
+	Task getTask(String listId, String taskId);
 	
-	Task createTask(String taskId, Task task);
+	Task createTask(String listId, Task task);
 	
-	Task updateTask(String taskId, String listId, Task task);
+	Task updateTask(String listId, String taskId, Task task);
 	
-	List<DeleteDocument> deleteTask(String taskId, String listId);
+	List<DeleteDocument> deleteTask(String listId, String taskId);
 }

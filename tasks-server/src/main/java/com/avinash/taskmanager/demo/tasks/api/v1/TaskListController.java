@@ -6,6 +6,8 @@ package com.avinash.taskmanager.demo.tasks.api.v1;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-@RequestMapping("/service/v1/users/self/lists")
+@RequestMapping("/api/v1/users/self/lists")
 public class TaskListController {
 
 
@@ -39,8 +41,8 @@ public class TaskListController {
 				notes = "Gets all tasks lists for an authenticated user.", response = ResponseEntity.class)
 		@RequestMapping(method = RequestMethod.GET)
 		@JsonView(View.TasklistWithTaskSummary.class)
-		public ResponseEntity<List<TaskList>> getAllTaskLists() {
-			return new ResponseEntity<>(taskListManager.getAllTaskLists(), HttpStatus.OK);
+		public ResponseEntity<Page<TaskList>> getAllTaskLists(Pageable pageRequest) {
+			return new ResponseEntity<>(taskListManager.getAllTaskLists(pageRequest), HttpStatus.OK);
 		}
 
 		@ApiOperation(value = "Get a specific task list", 

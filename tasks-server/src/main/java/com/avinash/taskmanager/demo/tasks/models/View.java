@@ -12,4 +12,8 @@ public class View {
 	public interface TasklistWithTaskSummary {
 		
 	}
+	
+	public interface TaskInternal extends TasklistWithTaskSummary {
+		
+	}
 }

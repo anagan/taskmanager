@@ -4,8 +4,10 @@
 package com.avinash.taskmanager.demo.tasks.models;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
 /**
@@ -15,13 +17,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class TaskList {
 
 	@JsonView(View.TasklistWithTaskSummary.class)
-	private String id;
+	@JsonProperty("id")
+	private String listId;
 
 	@JsonView(View.TasklistWithTaskSummary.class)
 	private String title;
 
 	@JsonView(View.TasklistWithTaskSummary.class)
-	private String parentId;
+	private String parent;
 
 	@JsonView(View.TasklistWithTaskSummary.class)
 	private String color;
@@ -47,19 +50,25 @@ public class TaskList {
 	@JsonView(View.TasklistWithTaskSummary.class)
 	private Timestamp trashedTime;
 
+	public TaskList() {
+		this.due = Timestamp.from(Instant.EPOCH);
+		this.createdTime = Timestamp.from(Instant.EPOCH);
+		this.modifiedTime = Timestamp.from(Instant.EPOCH);
+		this.trashedTime = Timestamp.from(Instant.EPOCH);;
+	}
 	/**
-	 * @return the id
+	 * @return the listId
 	 */
-	public String getId() {
-		return id;
+	public String getListId() {
+		return listId;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param listId
+	 *            the listId to set
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setListId(String listId) {
+		this.listId = listId;
 	}
 
 	/**
@@ -78,18 +87,18 @@ public class TaskList {
 	}
 
 	/**
-	 * @return the parentId
+	 * @return the parent
 	 */
-	public String getParentId() {
-		return parentId;
+	public String getParent() {
+		return parent;
 	}
 
 	/**
-	 * @param parentId
-	 *            the parentId to set
+	 * @param parent
+	 *            the parent to set
 	 */
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
+	public void setParent(String parent) {
+		this.parent = parent;
 	}
 
 	/**

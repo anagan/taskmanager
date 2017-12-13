@@ -24,10 +24,10 @@ public class HttpExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public RestErrorResponse onException(Exception ex, HttpServletRequest request) {
-		String requestUrl = request.getRequestURL().toString();
-		logger.error(requestUrl, ex);
+		String requestUri = request.getRequestURI().toString();
+		logger.error(requestUri, ex);
 
-		return new RestErrorResponse(FAILED, ex.getMessage(), requestUrl, HttpStatus.INTERNAL_SERVER_ERROR,
+		return new RestErrorResponse(FAILED, ex.getMessage(), requestUri, HttpStatus.INTERNAL_SERVER_ERROR,
 				String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()) + " - "
 						+ HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
 

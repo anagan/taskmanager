@@ -17,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.avinash.taskmanager.demo.tasks.models.Priority;
 import com.avinash.taskmanager.demo.tasks.models.Status;
 
@@ -25,13 +27,14 @@ import com.avinash.taskmanager.demo.tasks.models.Status;
  *
  */
 @Entity
+@DynamicUpdate
 @Table(name = "tasks")
 public class TaskEntity {
 
 	private long id;
 	private String taskId;
 	private String title;
-	private TaskListEntity parent;
+	private TaskListEntity parId;
 	private String type;
 	private String position;
 	private Status status;
@@ -88,20 +91,20 @@ public class TaskEntity {
 	}
 
 	/**
-	 * @return the parent
+	 * @return the parId
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "tasklist_ref_id")
-	public TaskListEntity getParent() {
-		return parent;
+	public TaskListEntity getParId() {
+		return parId;
 	}
 
 	/**
-	 * @param parent
-	 *            the parent to set
+	 * @param parId
+	 *            the parId to set
 	 */
-	public void setParent(TaskListEntity parent) {
-		this.parent = parent;
+	public void setParId(TaskListEntity parId) {
+		this.parId = parId;
 	}
 
 	/**
@@ -201,6 +204,7 @@ public class TaskEntity {
 	/**
 	 * @return the createdTime
 	 */
+	@Column(updatable = false)
 	public Timestamp getCreatedTime() {
 		return createdTime;
 	}
