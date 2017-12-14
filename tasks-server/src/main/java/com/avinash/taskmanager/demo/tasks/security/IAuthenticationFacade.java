@@ -3,9 +3,6 @@
  */
 package com.avinash.taskmanager.demo.tasks.security;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.avinash.taskmanager.demo.tasks.models.User;
 
 /**
@@ -14,9 +11,11 @@ import com.avinash.taskmanager.demo.tasks.models.User;
  */
 public interface IAuthenticationFacade {
 
-	Authentication getAuthentication();
-
-	UserDetails getUserDetails();
-	
+	/**
+	 * Returns logged in user details after request is processed by Spring security
+	 * Authentication manager
+	 * 
+	 * @return {@link User} user details
+	 */
 	User getLoggedInUser();
 }

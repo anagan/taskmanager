@@ -145,7 +145,7 @@ public class UserEntity {
 	/**
 	 * @return the taskLists
 	 */
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
 	public List<TaskListEntity> getTaskLists() {
 		return taskLists;
 	}

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -15,6 +16,9 @@ import com.fasterxml.jackson.annotation.JsonView;
  *
  */
 public class TaskList {
+
+	@JsonIgnore
+	private long id;
 
 	@JsonView(View.TasklistWithTaskSummary.class)
 	@JsonProperty("id")
@@ -55,6 +59,18 @@ public class TaskList {
 		this.createdTime = Timestamp.from(Instant.EPOCH);
 		this.modifiedTime = Timestamp.from(Instant.EPOCH);
 		this.trashedTime = Timestamp.from(Instant.EPOCH);;
+	}
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 	/**
 	 * @return the listId

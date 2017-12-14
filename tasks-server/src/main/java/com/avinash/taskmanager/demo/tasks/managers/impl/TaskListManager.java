@@ -41,7 +41,7 @@ public class TaskListManager implements ITaskListManager {
 
 	@Autowired
 	ITaskListDao taskListDao;
-	
+
 	@Autowired
 	ITaskDao taskDao;
 
@@ -152,26 +152,37 @@ public class TaskListManager implements ITaskListManager {
 	 */
 	@Override
 	public List<DeleteDocument> deleteTaskList(String taskListId) {
-		
+
 		TaskListEntity taskListEntity = getTaskListEntity(taskListId);
-		
+
 		List<DeleteDocument> deletedDocs = new ArrayList<>();
 		List<TaskEntity> taskEntities = taskListEntity.getTasks();
-		
-		if(CollectionUtils.isNotEmpty(taskEntities)) {
-			for(TaskEntity taskEntity: taskEntities) {
+
+		if (CollectionUtils.isNotEmpty(taskEntities)) {
+			for (TaskEntity taskEntity : taskEntities) {
 				deletedDocs.add(new DeleteDocument(taskEntity.getTaskId(), taskEntity.getType()));
 			}
 		}
-		
+
 		taskListDao.delete(taskListEntity);
 		deletedDocs.add(new DeleteDocument(taskListEntity.getListId(), taskListEntity.getType()));
-		
+
 		return deletedDocs;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.avinash.taskmanager.demo.tasks.managers.ITaskListManager#
+	 * getTaskListEntity(java.lang.String)
+	 */
 	@Override
 	public TaskListEntity getTaskListEntity(String taskListId) {
+		
+		if(StringUtils.isEmpty(taskListId)) {
+			return null;
+		}
+		
 		UserEntity userEntity = userManager.getLoggedInUser();
 		TaskListEntity taskListEntity = taskListDao.findByListIdAndTrashedFalse(taskListId);
 
@@ -188,6 +199,14 @@ public class TaskListManager implements ITaskListManager {
 		return taskListEntity;
 	}
 
+	/**
+	 * Converts list of {@link TaskListEntity} and return a new {@link Page} with
+	 * content of current one
+	 * 
+	 * @param taskListEntities
+	 *            must not be null
+	 * @return a new {@link Page} with the content of the current one
+	 */
 	private Page<TaskList> convertFromEntityListPage(Page<TaskListEntity> taskListEntities) {
 
 		if (null == taskListEntities) {
@@ -197,6 +216,14 @@ public class TaskListManager implements ITaskListManager {
 		return taskListEntities.map(t -> convertFromEntity(t));
 	}
 
+	/**
+	 * Converts an entity {@link TaskListEntity} to corresponding model
+	 * {@link TaskList}
+	 * 
+	 * @param taskListEntity
+	 *            must not be null
+	 * @return {@link TaskList}
+	 */
 	private TaskList convertFromEntity(TaskListEntity taskListEntity) {
 
 		if (null == taskListEntity) {
@@ -207,6 +234,14 @@ public class TaskListManager implements ITaskListManager {
 		return taskList;
 	}
 
+	/**
+	 * Converts model {@link TaskList} to a corresponding entity
+	 * {@link TaskListEntity}
+	 * 
+	 * @param taskList
+	 *            must not be null
+	 * @return {@link TaskListEntity}
+	 */
 	private TaskListEntity convertToEntity(TaskList taskList) {
 
 		if (null == taskList) {

@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 
 /**
+ * Provides APIs for creating & managing lists
+ * 
  * @author Avinash
  *
  */
@@ -33,47 +35,73 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/v1/users/self/lists")
 public class TaskListController {
 
+	@Autowired
+	private ITaskListManager taskListManager;
 
-		@Autowired
-		private ITaskListManager taskListManager;
+	/**
+	 * API endpoint for fetching all lists for an authenticated user
+	 * 
+	 * @param pageRequest
+	 * @return {@link List} of {@link TaskList}
+	 */
+	@ApiOperation(value = "Get all tasks lists", notes = "Gets all tasks lists for an authenticated user.", response = ResponseEntity.class)
+	@RequestMapping(method = RequestMethod.GET)
+	@JsonView(View.TasklistWithTaskSummary.class)
+	public ResponseEntity<Page<TaskList>> getAllTaskLists(Pageable pageRequest) {
+		return new ResponseEntity<>(taskListManager.getAllTaskLists(pageRequest), HttpStatus.OK);
+	}
 
-		@ApiOperation(value = "Get all tasks lists", 
-				notes = "Gets all tasks lists for an authenticated user.", response = ResponseEntity.class)
-		@RequestMapping(method = RequestMethod.GET)
-		@JsonView(View.TasklistWithTaskSummary.class)
-		public ResponseEntity<Page<TaskList>> getAllTaskLists(Pageable pageRequest) {
-			return new ResponseEntity<>(taskListManager.getAllTaskLists(pageRequest), HttpStatus.OK);
-		}
+	/**
+	 * API endpoint for fetching a list for an authenticated user
+	 * 
+	 * @param listId
+	 * @return {@link TaskList}
+	 */
+	@ApiOperation(value = "Get a specific task list", notes = "Gets a specific task list.", response = ResponseEntity.class)
+	@RequestMapping(value = "/{listId}", method = RequestMethod.GET)
+	@JsonView(View.TasklistWithTaskSummary.class)
+	public ResponseEntity<TaskList> getTaskList(@PathVariable("listId") String listId) {
+		return new ResponseEntity<>(taskListManager.getTaskList(listId), HttpStatus.OK);
+	}
 
-		@ApiOperation(value = "Get a specific task list", 
-				notes = "Gets a specific task list.", response = ResponseEntity.class)
-		@RequestMapping(value = "/{listId}", method = RequestMethod.GET)
-		@JsonView(View.TasklistWithTaskSummary.class)
-		public ResponseEntity<TaskList> getTaskList(@PathVariable("listId") String listId) {
-			return new ResponseEntity<>(taskListManager.getTaskList(listId), HttpStatus.OK);
-		}
+	/**
+	 * API endpoint for creating a list for an authenticated user
+	 * 
+	 * @param taskList
+	 * @return created {@link TaskList}
+	 */
+	@ApiOperation(value = "Create a custom task list", notes = "Creates a custom task list.", response = ResponseEntity.class)
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<TaskList> createTaskList(@RequestBody TaskList taskList) {
+		return new ResponseEntity<>(taskListManager.createTaskList(taskList), HttpStatus.OK);
+	}
 
-		@ApiOperation(value = "Create a custom task list", 
-				notes = "Creates a custom task list.", response = ResponseEntity.class)
-		@RequestMapping(method = RequestMethod.POST)
-		public ResponseEntity<TaskList> createTaskList(@RequestBody TaskList taskList) {
-			return new ResponseEntity<>(taskListManager.createTaskList(taskList), HttpStatus.OK);
-		}
+	/**
+	 * API endpoint for updating a list for an authenticated user
+	 * 
+	 * @param listId
+	 * @param taskList
+	 * @return updated {@link TaskList}
+	 */
+	@ApiOperation(value = "Update a task list", notes = "Updates a task list.", response = ResponseEntity.class)
+	@RequestMapping(value = "/{listId}", method = RequestMethod.PUT)
+	@JsonView(View.TasklistWithTaskSummary.class)
+	public ResponseEntity<TaskList> updateTaskList(@PathVariable("listId") String listId,
+			@RequestBody TaskList taskList) {
+		return new ResponseEntity<>(taskListManager.updateTaskList(listId, taskList), HttpStatus.OK);
+	}
 
-		@ApiOperation(value = "Update a task list", 
-				notes = "Updates a task list.", response = ResponseEntity.class)
-		@RequestMapping(value = "/{listId}", method = RequestMethod.PUT)
-		@JsonView(View.TasklistWithTaskSummary.class)
-		public ResponseEntity<TaskList> updateTaskList(@PathVariable("listId") String listId,
-				@RequestBody TaskList taskList) {
-			return new ResponseEntity<>(taskListManager.updateTaskList(listId, taskList), HttpStatus.OK);
-		}
-
-		@ApiOperation(value = "Delete a task list", 
-				notes = "Deletes a task list.", response = ResponseEntity.class)
-		@RequestMapping(value = "/{listId}", method = RequestMethod.DELETE)
-		@DeleteDocumentType(documentType = TaskList.class)
-		public ResponseEntity<List<DeleteDocument>> deleteTaskList(@PathVariable("listId") String listId) {
-			return new ResponseEntity<>(taskListManager.deleteTaskList(listId), HttpStatus.OK);
-		}
+	/**
+	 * API endpoint for deleting a list & associated tasks for an authenticated user
+	 * 
+	 * @param listId
+	 * @return {@link List} of {@link DeleteDocument} containing list id and tasks
+	 *         id that was deleted
+	 */
+	@ApiOperation(value = "Delete a task list", notes = "Deletes a task list.", response = ResponseEntity.class)
+	@RequestMapping(value = "/{listId}", method = RequestMethod.DELETE)
+	@DeleteDocumentType(documentType = TaskList.class)
+	public ResponseEntity<List<DeleteDocument>> deleteTaskList(@PathVariable("listId") String listId) {
+		return new ResponseEntity<>(taskListManager.deleteTaskList(listId), HttpStatus.OK);
+	}
 }

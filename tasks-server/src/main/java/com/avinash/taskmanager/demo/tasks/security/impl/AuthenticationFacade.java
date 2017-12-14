@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
@@ -23,23 +22,10 @@ import com.avinash.taskmanager.demo.tasks.security.IAuthenticationFacade;
  */
 @Component
 public class AuthenticationFacade implements IAuthenticationFacade {
-
-	@Override
-	public Authentication getAuthentication() {
-		return SecurityContextHolder.getContext().getAuthentication();
-	}
-
-	@Override
-	public UserDetails getUserDetails() {
-
-		Authentication authentication = getAuthentication();
-		if (authentication instanceof AnonymousAuthenticationToken || null == authentication.getPrincipal()) {
-			throw new UnauthorizedUserException("Unauthorized user");
-		}
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		return userDetails;
-	}
-
+	
+	/* (non-Javadoc)
+	 * @see com.avinash.taskmanager.demo.tasks.security.IAuthenticationFacade#getLoggedInUser()
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public User getLoggedInUser() {
@@ -61,6 +47,10 @@ public class AuthenticationFacade implements IAuthenticationFacade {
 		}
 
 		return user;
+	}
+
+	private Authentication getAuthentication() {
+		return SecurityContextHolder.getContext().getAuthentication();
 	}
 
 	private User fromMap(Map<String, Object> map) {

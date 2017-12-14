@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 
 /**
+ * Provides APIs for creating & managing tasks
+ * 
  * @author Avinash
  *
  */
@@ -34,31 +36,55 @@ public class TaskController {
 	@Autowired
 	private ITaskManager taskManager;
 
-	@ApiOperation(value = "Get all tasks in the specified task list", 
-			notes = "Gets all tasks in the specified task list.", response = ResponseEntity.class)
+	/**
+	 * API endpoint for fetching all tasks for a list identified by listId
+	 * 
+	 * @param listId
+	 * @return {@link List} of tasks for {@linkplain listId}
+	 */
+	@ApiOperation(value = "Get all tasks in the specified task list", notes = "Gets all tasks in the specified task list.", response = ResponseEntity.class)
 	@RequestMapping(value = "/{listId}/tasks", method = RequestMethod.GET)
 	@JsonView(View.TasklistWithTaskSummary.class)
 	public ResponseEntity<List<Task>> getAllTasks(@PathVariable("listId") String listId) {
 		return new ResponseEntity<>(taskManager.getAllTasks(listId), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Get a specific task in the specified task list", 
-			notes = "Gets a specific task in the specified task list.", response = ResponseEntity.class)
+	/**
+	 * API endpoint for fetching task by taskId for a list identified by listId
+	 * 
+	 * @param listId
+	 * @param taskId
+	 * @return {@link Task}
+	 */
+	@ApiOperation(value = "Get a specific task in the specified task list", notes = "Gets a specific task in the specified task list.", response = ResponseEntity.class)
 	@RequestMapping(value = "/{listId}/tasks/{taskId}", method = RequestMethod.GET)
 	@JsonView(View.TasklistWithTaskSummary.class)
 	public ResponseEntity<Task> getTask(@PathVariable("listId") String listId, @PathVariable("taskId") String taskId) {
 		return new ResponseEntity<>(taskManager.getTask(listId, taskId), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Create a custom task in the specified task list", 
-			notes = "Creates a custom task in the specified task list.", response = ResponseEntity.class)
+	/**
+	 * API endpoint for creating a task for a list identified by listId
+	 * 
+	 * @param listId
+	 * @param task
+	 * @return created {@link Task}
+	 */
+	@ApiOperation(value = "Create a custom task in the specified task list", notes = "Creates a custom task in the specified task list.", response = ResponseEntity.class)
 	@RequestMapping(value = "/{listId}/tasks", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@PathVariable("listId") String listId, @RequestBody Task task) {
 		return new ResponseEntity<>(taskManager.createTask(listId, task), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Update a task in the specified task list", 
-			notes = "Updates a task in the specified task list.", response = ResponseEntity.class)
+	/**
+	 *  API endpoint for updating a task for a list identified by listId
+	 * 
+	 * @param listId
+	 * @param taskId
+	 * @param task
+	 * @return updated {@link Task}
+	 */
+	@ApiOperation(value = "Update a task in the specified task list", notes = "Updates a task in the specified task list.", response = ResponseEntity.class)
 	@RequestMapping(value = "/{listId}/tasks/{taskId}", method = RequestMethod.PUT)
 	@JsonView(View.TasklistWithTaskSummary.class)
 	public ResponseEntity<Task> updateTask(@PathVariable("listId") String listId, @PathVariable("taskId") String taskId,
@@ -66,8 +92,14 @@ public class TaskController {
 		return new ResponseEntity<>(taskManager.updateTask(listId, taskId, task), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Delete a task in the specified task list", 
-			notes = "Deletes a task in the specified task list.", response = ResponseEntity.class)
+	/**
+	 *  API endpoint for deleting a task for a list identified by listId
+	 * 
+	 * @param listId
+	 * @param taskId
+	 * @return {@link DeleteDocument} containing deleted task id
+	 */
+	@ApiOperation(value = "Delete a task in the specified task list", notes = "Deletes a task in the specified task list.", response = ResponseEntity.class)
 	@RequestMapping(value = "/{listId}/tasks/{taskId}", method = RequestMethod.DELETE)
 	@DeleteDocumentType(documentType = Task.class)
 	public ResponseEntity<List<DeleteDocument>> deleteTask(@PathVariable("listId") String listId,
